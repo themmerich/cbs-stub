@@ -24,6 +24,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@parcit/npm-bibliothek/assets",
+                "output": "public"
               }
             ],
             "styles": [
