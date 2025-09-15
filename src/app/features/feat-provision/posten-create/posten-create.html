@@ -1,0 +1,10 @@
+<p-dialog
+  header="{{ 'posten.create.title' | translate }}"
+  [modal]="true"
+  [style]="{ width: '60rem', height: '38rem'}"
+  [(visible)]="visible"
+  (onShow)="resetForm()"
+  (onHide)="cancel()"
+>
+  <app-posten-form (submitPosten)="create($event)" (cancelPosten)="cancel()" [posten]="posten()"/>
+</p-dialog>

@@ -1,0 +1,14 @@
+<div class="mb-1">
+  <p-floatlabel variant="on" class="w-full">
+    <input pInputText pSize="small" [id]="id()" [autocomplete]="autocomplete()" [formControl]="formControl" class="w-full"/>
+    <label [for]="id()">
+      {{ label() | translate }}
+      @if (required()) {
+        <span class="text-red-500">*</span>
+      }
+    </label>
+  </p-floatlabel>
+  @if (formControl.invalid && formControl.dirty) {
+    <p-message severity="error" variant="simple" size="small">{{ getErrorMessage() }}</p-message>
+  }
+</div>

@@ -1,0 +1,57 @@
+{
+  "provision": {
+    "stichtag": "Stichtag",
+    "kontonummer": "Kontonummer",
+    "geschaeftsnummer": "Geschäftsnummer",
+    "erfassungsart": "Erfassungsart",
+    "bezeichnung": "Provisionsbezeichnung",
+    "kundennummer": "Kundennummer",
+    "beraternummer": "Beraternummer",
+    "waehrung": "Währung",
+    "neugeschaeft": "Bestands-/Neugeschäft",
+    "vertriebsweg": "Vertriebsweg",
+    "vpProduktinfo1": "VP Produktinfo 1",
+    "vpProduktinfo2": "VP Produktinfo 2",
+    "vpProduktinfo3": "VP Produktinfo 3",
+    "vpProduktinfo4": "VP Produktinfo 4",
+    "vpProduktinfo5": "VP Produktinfo 5",
+    "postenaufwand": "Postenaufwand (EUR)",
+    "postenertrag": "Postenertrag (EUR)",
+    "volumen": "Zugrunde liegendes Volumen (EUR)",
+    "umsatz": "Zugrunde liegender Umsatz (EUR)",
+    "postenanzahl": "Postenanzahl",
+    "postenkosten": "Postenkosten (EUR)"
+  },
+  "posten": {
+    "aufwand": "Aufwand",
+    "ertrag": "Ertrag",
+    "volumen": "Volumen",
+    "umsatz": "Umsatz",
+    "kosten": "Kosten",
+    "anzahl": "Anzahl",
+    "aquisitionsweg": "Aquisitionsweg",
+    "erfassungsart": "Erfassungsart",
+    "gebuehrenart": "Gebührenart",
+    "individualprodukt": "Individualprodukt",
+    "isinNummer": "ISIN Nummer",
+    "ordernummer": "Ordernummer",
+    "provisionstyp": "Provisionstyp",
+    "sparte": "Sparte",
+    "standardprodukt": "Standardprodukt",
+    "tarif": "Tarif",
+    "textschluesselgruppe": "Textschlüsselgruppe",
+    "vpPostenidentifier1": "VP Postenidentifier 1",
+    "vpPostenidentifier2": "VP Postenidentifier 2",
+    "vpPostenidentifier3": "VP Postenidentifier 3",
+    "vpPostenidentifier4": "VP Postenidentifier 4",
+    "vpPostenidentifier5": "VP Postenidentifier 5",
+    "wertpapierkennnummer": "Wertpapierkennnummer",
+    "zuwachsvertrag": "Zuwachsvertrag",
+    "edit": {
+      "title": "Posten bearbeiten"
+    },
+    "create": {
+      "title": "Posten anlegen"
+    }
+  }
+}

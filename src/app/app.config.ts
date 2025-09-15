@@ -2,22 +2,41 @@ import {ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessCh
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
-import {provideExceptionHandler, provideI18n} from '@parcit/wuf-widgets';
-import {provideWufTheme} from '@parcit/wuf-widgets/themes';
-import {provideAnimations} from '@angular/platform-browser/animations';
-import {provideHttpClient, withInterceptors, withInterceptorsFromDi} from '@angular/common/http';
-import {Level, provideRootLogger} from '@parcit/wuf-core';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
+import {providePrimeNG} from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+import {provideTranslateService} from '@ngx-translate/core';
+import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
+import {ConfirmationService} from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
-    provideWufTheme(),
-    provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-    provideRootLogger({ level: Level.DEBUG }),
-    provideI18n(),
-    provideExceptionHandler(),
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes)
+    provideRouter(routes),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+        options: {
+          cssLayer: {
+            name: 'primeng',
+            order: 'theme, base, primeng'
+          }
+        }
+      }
+    }),
+    provideTranslateService({
+      defaultLanguage: 'de',
+      loader: provideTranslateHttpLoader({
+        prefix: './i18n/',
+        suffix: '.json'
+      }),
+      fallbackLang: 'de',
+      lang: 'de'
+    }),
+    ConfirmationService
   ]
 };
