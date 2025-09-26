@@ -19,7 +19,7 @@ export class PostenCreate {
   store = inject(ProvisionStore);
 
   visible = model.required<boolean>();
-  posten = input<Posten | null>(null);
+  posten = input<Posten>({});
   formComponent = viewChild.required<PostenFormComponent>(PostenFormComponent);
   showCreateDialog = output<boolean>();
   showMessage = output<void>(); // TODO: change type

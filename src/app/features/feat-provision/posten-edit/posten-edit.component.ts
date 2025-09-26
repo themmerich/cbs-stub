@@ -19,7 +19,8 @@ export class PostenEditComponent {
   store = inject(ProvisionStore);
 
   visible = model.required<boolean>();
-  posten = input<Posten | null>(null);
+  posten = input.required<Posten>();
+  postenListe = input.required<Posten[]>();
   formComponent = viewChild.required<PostenFormComponent>(PostenFormComponent);
   showEditDialog = output<boolean>();
   showMessage = output<void>(); // TODO: change type

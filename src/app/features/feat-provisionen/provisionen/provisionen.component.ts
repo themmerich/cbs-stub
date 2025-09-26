@@ -30,6 +30,7 @@ export class ProvisionenComponent {
   router = inject(Router);
 
   private gridApi!: GridApi;
+  dark = true;
 
   form = new FormGroup({
     stichtag: new FormControl<Date | undefined>(undefined),
@@ -83,6 +84,18 @@ export class ProvisionenComponent {
   onRowDoubleClick(event: RowDoubleClickedEvent) {
     console.log('dbClick', event);
     this.router.navigate(['/provision', event.data.id]);
+  }
+
+  toggleDarkMode() {
+    const element = document.querySelector('html');
+    const themeMode = element?.getAttribute('data-ag-theme-mode');
+    element?.classList.toggle('dark');
+    this.dark = !this.dark;
+    if (themeMode === 'dark') {
+      element?.setAttribute('data-ag-theme-mode', 'light');
+    } else {
+      element?.setAttribute('data-ag-theme-mode', 'dark');
+    }
   }
 
   protected readonly themeBalham = themeBalham;

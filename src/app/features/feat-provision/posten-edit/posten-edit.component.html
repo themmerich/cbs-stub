@@ -1,9 +1,9 @@
 <p-dialog
   header="{{ 'posten.edit.title' | translate }}"
   [modal]="true"
-  [style]="{ width: '60rem', height: '38rem'}"
+  [style]="{ width: '60rem', height: '48rem'}"
   [(visible)]="visible"
   (onHide)="cancel()"
 >
-  <app-posten-form (submitPosten)="update($event)" (cancelPosten)="cancel()" [posten]="posten()"/>
+  <app-posten-form (submitPosten)="update($event)" (cancelPosten)="cancel()" [posten]="posten()" [postenListe]="postenListe()"/>
 </p-dialog>

@@ -1,9 +1,16 @@
-import {Component, inject, signal} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, computed, effect, inject, signal} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Fieldset} from 'primeng/fieldset';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AgGridAngular} from 'ag-grid-angular';
-import {ColDef, GridApi, GridReadyEvent, RowDoubleClickedEvent, themeBalham} from 'ag-grid-enterprise';
+import {
+  ColDef,
+  GridApi,
+  GridReadyEvent,
+  RowDoubleClickedEvent,
+  themeBalham,
+  ValueFormatterParams
+} from 'ag-grid-enterprise';
 import {Posten} from '../../model/posten';
 import {ProvisionStore} from '../../data/provision.store';
 import {PostenEditComponent} from '../posten-edit/posten-edit.component';
@@ -11,6 +18,14 @@ import {Toolbar} from 'primeng/toolbar';
 import {Button} from 'primeng/button';
 import {FormInputComponent} from '../../../shared/ui/form-input/form-input.component';
 import {PostenCreate} from '../posten-create/posten-create';
+
+function currencyFormatter(params: ValueFormatterParams) {
+  const value = Math.floor(params.value);
+  if (isNaN(value)) {
+    return '';
+  }
+  return value.toString() + ' €';
+}
 
 @Component({
   selector: 'app-provision',
@@ -29,12 +44,14 @@ import {PostenCreate} from '../posten-create/posten-create';
 })
 export class ProvisionComponent {
   route = inject(ActivatedRoute);
+  router = inject(Router);
   store = inject(ProvisionStore);
 
-  id = signal<string | null>(null);
+  id = signal<number>(0);
+  provision = computed(() => this.store.getProvision(this.id()));
   showEditDialog = signal(false);
   showCreateDialog = signal(false);
-  selectedPosten = signal<Posten | null>(null);
+  selectedPosten = signal<Posten>({});
   private gridApi!: GridApi;
 
   provisionForm = new FormGroup({
@@ -58,24 +75,28 @@ export class ProvisionComponent {
   });
 
   constructor() {
-    this.id.set(this.route.snapshot.paramMap.get('id'));
-    const provisionId = Number(this.id());
-    const provision = this.store.getProvision(provisionId);
-    if (provision) {
-      this.provisionForm.patchValue(provision);
-      this.rowData = provision.posten;
-    }
+    this.id.set(Number(this.route.snapshot.paramMap.get('id')));
+
+    effect(() => {
+      this.provisionForm.patchValue(this.provision() as any);
+      this.rowData = this.provision()?.posten ?? [];
+    });
   }
 
+  columnTypes = {
+    currency: {
+      valueFormatter: currencyFormatter
+    }
+  };
   rowData: Posten[] = [];
   colDefs: ColDef[] = [
-    { field: "aufwand", headerName: 'Aufwand (EUR)' },
-    { field: "ertrag", headerName: 'Ertrag (EUR)' },
-    { field: "volumen", headerName: 'Volumen (EUR)' },
-    { field: "umsatz", headerName: 'Umsatz (EUR)' },
-    { field: "kosten", headerName: 'Kosten pro Posten (EUR)' },
-    { field: "anzahl", headerName: 'Anzahl' },
-    { field: "aquisitionsweg", headerName: 'Aquisitionsweg' },
+    { field: "aufwand", headerName: 'Aufwand', type: 'currency' },
+    { field: "ertrag", headerName: 'Ertrag', type: 'currency' },
+    { field: "volumen", headerName: 'Volumen', type: 'currency' },
+    { field: "umsatz", headerName: 'Umsatz', type: 'currency' },
+    { field: "kosten", headerName: 'Kosten pro Posten', type: 'currency' },
+    { field: "anzahl", headerName: 'Anzahl' }
+    /*{ field: "aquisitionsweg", headerName: 'Aquisitionsweg' },
     { field: "erfassungsart", headerName: 'Erfassungsart Posten' },
     { field: "gebuehrenart", headerName: 'Gebührenart' },
     { field: "individualprodukt", headerName: 'Individualprodukt' },
@@ -92,11 +113,32 @@ export class ProvisionComponent {
     { field: "vpPostenidentifier4", headerName: 'VP Postenidentifier 4' },
     { field: "vpPostenidentifier5", headerName: 'VP Postenidentifier 5' },
     { field: "wertpapierkennnummer", headerName: 'Wertpapierkennnumer' },
-    { field: "zuwachsvertrag", headerName: 'Zuwachsvertrag' },
+    { field: "zuwachsvertrag", headerName: 'Zuwachsvertrag' },*/
   ];
+
+  pinnedBottomRowData = signal([
+    { aufwand: 0, ertrag: 0, volumen: 0, umsatz: 0, kosten: 0, anzahl: 0 } as Posten
+  ]);
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    this.updateTotals();
+  }
+
+  updateTotals() {
+    const allRows: any[] = [];
+    this.gridApi.forEachNodeAfterFilterAndSort(node => allRows.push(node.data));
+
+    const aufwand = allRows.reduce((sum, r) => sum + r.aufwand, 0);
+    const ertrag = allRows.reduce((sum, r) => sum + r.ertrag, 0);
+    const volumen = allRows.reduce((sum, r) => sum + r.volumen, 0);
+    const umsatz = allRows.reduce((sum, r) => sum + r.umsatz, 0);
+    const kosten = allRows.reduce((sum, r) => sum + r.kosten, 0);
+    const anzahl = allRows.reduce((sum, r) => sum + r.anzahl, 0);
+
+   this.pinnedBottomRowData.set([
+      { aufwand: aufwand, ertrag: ertrag, volumen: volumen, umsatz: umsatz, kosten: kosten, anzahl: anzahl } as Posten
+    ]);
   }
 
   onRowDoubleClick(event: RowDoubleClickedEvent) {
@@ -110,6 +152,10 @@ export class ProvisionComponent {
 
   showMessage(event: any) {
     // TODO: this!
+  }
+
+  onGoBack() {
+    this.router.navigate(['/provisionen']);
   }
 
   protected readonly themeBalham = themeBalham;

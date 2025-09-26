@@ -1,9 +1,10 @@
-import {Component, effect, input, output} from '@angular/core';
+import {Component, computed, effect, input, model, output} from '@angular/core';
 import {FormInputComponent} from '../../../shared/ui/form-input/form-input.component';
 import {FormNumberComponent} from '../../../shared/ui/form-number/form-number.component';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {Button} from 'primeng/button';
 import {Posten} from '../../model/posten';
+import {Fieldset} from 'primeng/fieldset';
 
 @Component({
   selector: 'app-posten-form',
@@ -11,15 +12,19 @@ import {Posten} from '../../model/posten';
     FormInputComponent,
     FormNumberComponent,
     ReactiveFormsModule,
-    Button
+    Button,
+    Fieldset
   ],
   templateUrl: './posten-form.component.html',
   styleUrl: './posten-form.component.scss'
 })
 export class PostenFormComponent {
-  posten = input<Posten | null>(null);
+  posten = model<Posten>({});
+  postenListe = input<Posten[]>([]);
   submitPosten = output<Posten>();
   cancelPosten = output<void>();
+  size = computed(() => this.postenListe().length);
+  index = computed(() => this.postenListe().indexOf(this.posten()));
 
   constructor() {
     effect(() => {
@@ -70,5 +75,13 @@ export class PostenFormComponent {
 
   onCancel() {
     this.cancelPosten.emit();
+  }
+
+  onNext() {
+    this.posten.set(this.postenListe()[this.index() + 1]);
+  }
+
+  onPrevious() {
+    this.posten.set(this.postenListe()[this.index() - 1]);
   }
 }

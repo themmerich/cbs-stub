@@ -28,18 +28,14 @@ export const ProvisionStore = signalStore(
         return store.provisionen().find(provision => provision.id === id);
       },
       removeProvision(id: number) {
-        if (id) {
-          patchState(store, {
-            provisionen: store.provisionen().filter((provision) => provision.id !== id)
-          });
-        }
+        patchState(store, {
+          provisionen: store.provisionen().filter((provision) => provision.id !== id)
+        });
       },
       updateProvision(updatedProvision: Provision) {
-        if (updatedProvision) {
-          patchState(store, {
-            provisionen: store.provisionen().map((provision) => (provision.id === updatedProvision.id ? updatedProvision : provision))
-          });
-        }
+        patchState(store, {
+          provisionen: store.provisionen().map((provision) => (provision.id === updatedProvision.id ? updatedProvision : provision))
+        });
       },
       createPosten(id: number, newPosten: Posten) {
         const updatedProvision = store.provisionen().find(provision => provision.id = id);
