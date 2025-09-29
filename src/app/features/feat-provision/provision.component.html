@@ -41,10 +41,11 @@
       [columnDefs]="colDefs"
       [columnTypes]="columnTypes"
       [pinnedBottomRowData]="pinnedBottomRowData()"
+      [getContextMenuItems]="getContextMenuItems"
       [theme]=themeBalham
       (gridReady)="onGridReady($event)"
-      (rowDoubleClicked)="onRowDoubleClick($event)"
     />
+    <!-- (rowDoubleClicked)="onRowDoubleClick($event)" -->
   </p-fieldset>
   <div class="flex justify-end gap-2 mr-4">
     <p-button label="Zurück" (onClick)="onGoBack()" />

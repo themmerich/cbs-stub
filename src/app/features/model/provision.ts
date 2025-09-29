@@ -2,13 +2,13 @@ import {Posten} from './posten';
 
 export interface Provision {
   id?: number,
-  stichtag?: Date,
-  kontonummer: number,
-  geschaeftsnummer: number,
+  stichtag?: string,
+  kontonummer: string,
+  geschaeftsnummer: string,
   erfassungsart: string,
   bezeichnung: string,
-  kundennummer: number,
-  beraternummer: number,
+  kundennummer: string,
+  beraternummer: string,
   waehrung: string,
   neugeschaeft: string,
   vertriebsweg?: string,

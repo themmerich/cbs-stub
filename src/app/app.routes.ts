@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import {ProvisionenComponent} from './features/feat-provisionen/provisionen/provisionen.component';
-import {ProvisionComponent} from './features/feat-provision/provision/provision.component';
+import {ProvisionenComponent} from './features/feat-provisionen/provisionen.component';
+import {ProvisionComponent} from './features/feat-provision/provision.component';
 
 export const routes: Routes = [
   {

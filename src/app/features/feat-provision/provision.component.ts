@@ -4,20 +4,20 @@ import {Fieldset} from 'primeng/fieldset';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AgGridAngular} from 'ag-grid-angular';
 import {
-  ColDef,
+  ColDef, DefaultMenuItem, GetContextMenuItemsParams,
   GridApi,
-  GridReadyEvent,
+  GridReadyEvent, MenuItemDef,
   RowDoubleClickedEvent,
   themeBalham,
   ValueFormatterParams
 } from 'ag-grid-enterprise';
-import {Posten} from '../../model/posten';
-import {ProvisionStore} from '../../data/provision.store';
-import {PostenEditComponent} from '../posten-edit/posten-edit.component';
+import {Posten} from '../model/posten';
+import {ProvisionStore} from '../data/provision.store';
+import {PostenEditComponent} from './posten-edit/posten-edit.component';
 import {Toolbar} from 'primeng/toolbar';
 import {Button} from 'primeng/button';
-import {FormInputComponent} from '../../../shared/ui/form-input/form-input.component';
-import {PostenCreate} from '../posten-create/posten-create';
+import {FormInputComponent} from '../../shared/ui/form-input/form-input.component';
+import {PostenCreate} from './posten-create/posten-create';
 
 function currencyFormatter(params: ValueFormatterParams) {
   const value = Math.floor(params.value);
@@ -90,30 +90,30 @@ export class ProvisionComponent {
   };
   rowData: Posten[] = [];
   colDefs: ColDef[] = [
-    { field: "aufwand", headerName: 'Aufwand', type: 'currency' },
-    { field: "ertrag", headerName: 'Ertrag', type: 'currency' },
-    { field: "volumen", headerName: 'Volumen', type: 'currency' },
-    { field: "umsatz", headerName: 'Umsatz', type: 'currency' },
-    { field: "kosten", headerName: 'Kosten pro Posten', type: 'currency' },
-    { field: "anzahl", headerName: 'Anzahl' }
-    /*{ field: "aquisitionsweg", headerName: 'Aquisitionsweg' },
-    { field: "erfassungsart", headerName: 'Erfassungsart Posten' },
-    { field: "gebuehrenart", headerName: 'Gebührenart' },
-    { field: "individualprodukt", headerName: 'Individualprodukt' },
-    { field: "isinNummer", headerName: 'ISIN-Nummer' },
-    { field: "ordernummer", headerName: 'Ordernummer' },
-    { field: "provisionstyp", headerName: 'Provisionstyp' },
-    { field: "sparte", headerName: 'Sparte' },
-    { field: "standardprodukt", headerName: 'Standardprodukt' },
-    { field: "tarif", headerName: 'Tarif' },
-    { field: "textschluesselgruppe", headerName: 'Textschlüsselgruppe' },
-    { field: "vpPostenidentifier1", headerName: 'VP Postenidentifier 1' },
-    { field: "vpPostenidentifier2", headerName: 'VP Postenidentifier 2' },
-    { field: "vpPostenidentifier3", headerName: 'VP Postenidentifier 3' },
-    { field: "vpPostenidentifier4", headerName: 'VP Postenidentifier 4' },
-    { field: "vpPostenidentifier5", headerName: 'VP Postenidentifier 5' },
-    { field: "wertpapierkennnummer", headerName: 'Wertpapierkennnumer' },
-    { field: "zuwachsvertrag", headerName: 'Zuwachsvertrag' },*/
+    { field: "aufwand", headerName: 'Aufwand', type: 'currency', editable: true },
+    { field: "ertrag", headerName: 'Ertrag', type: 'currency', editable: true },
+    { field: "volumen", headerName: 'Volumen', type: 'currency', editable: true },
+    { field: "umsatz", headerName: 'Umsatz', type: 'currency', editable: true },
+    { field: "kosten", headerName: 'Kosten pro Posten', type: 'currency', editable: true },
+    { field: "anzahl", headerName: 'Anzahl', editable: true },
+    { field: "aquisitionsweg", headerName: 'Aquisitionsweg', editable: true },
+    { field: "erfassungsart", headerName: 'Erfassungsart Posten', editable: true },
+    { field: "gebuehrenart", headerName: 'Gebührenart', editable: true },
+    { field: "individualprodukt", headerName: 'Individualprodukt', editable: true },
+    { field: "isinNummer", headerName: 'ISIN-Nummer', editable: true },
+    { field: "ordernummer", headerName: 'Ordernummer', editable: true },
+    { field: "provisionstyp", headerName: 'Provisionstyp', editable: true },
+    { field: "sparte", headerName: 'Sparte', editable: true },
+    { field: "standardprodukt", headerName: 'Standardprodukt', editable: true },
+    { field: "tarif", headerName: 'Tarif', editable: true },
+    { field: "textschluesselgruppe", headerName: 'Textschlüsselgruppe', editable: true },
+    { field: "vpPostenidentifier1", headerName: 'VP Postenidentifier 1', editable: true },
+    { field: "vpPostenidentifier2", headerName: 'VP Postenidentifier 2', editable: true },
+    { field: "vpPostenidentifier3", headerName: 'VP Postenidentifier 3', editable: true },
+    { field: "vpPostenidentifier4", headerName: 'VP Postenidentifier 4', editable: true },
+    { field: "vpPostenidentifier5", headerName: 'VP Postenidentifier 5', editable: true },
+    { field: "wertpapierkennnummer", headerName: 'Wertpapierkennnumer', editable: true },
+    { field: "zuwachsvertrag", headerName: 'Zuwachsvertrag', editable: true },
   ];
 
   pinnedBottomRowData = signal([
@@ -123,6 +123,21 @@ export class ProvisionComponent {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.updateTotals();
+  }
+
+  getContextMenuItems = (params: GetContextMenuItemsParams):
+    | (DefaultMenuItem | MenuItemDef)[]
+    | Promise<(DefaultMenuItem | MenuItemDef)[]> => {
+    const result: (DefaultMenuItem | MenuItemDef)[] = [
+      {
+        // custom item
+        name: "Edit",
+        action: () => {
+          this.selectedPosten.set(params?.node?.data);
+          this.showEditDialog.set(true);
+        },
+      }];
+    return result;
   }
 
   updateTotals() {
@@ -141,10 +156,10 @@ export class ProvisionComponent {
     ]);
   }
 
-  onRowDoubleClick(event: RowDoubleClickedEvent) {
+  /*onRowDoubleClick(event: RowDoubleClickedEvent) {
     this.selectedPosten.set(event.data);
     this.showEditDialog.set(true);
-  }
+  }*/
 
   onAddPosten() {
     this.showCreateDialog.set(true);

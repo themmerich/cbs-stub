@@ -20,7 +20,13 @@
     "volumen": "Zugrunde liegendes Volumen (EUR)",
     "umsatz": "Zugrunde liegender Umsatz (EUR)",
     "postenanzahl": "Postenanzahl",
-    "postenkosten": "Postenkosten (EUR)"
+    "postenkosten": "Postenkosten (EUR)",
+    "edit": {
+      "title": "Provision bearbeiten"
+    },
+    "create": {
+      "title": "Provision anlegen"
+    }
   },
   "posten": {
     "aufwand": "Aufwand",

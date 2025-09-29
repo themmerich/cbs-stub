@@ -1,0 +1,9 @@
+<p-dialog
+  header="{{ 'provision.edit.title' | translate }}"
+  [modal]="true"
+  [style]="{ width: '60rem', height: '48rem'}"
+  [(visible)]="visible"
+  (onHide)="cancel()"
+>
+  <app-provision-form (submitProvision)="update($event)" (cancelProvision)="cancel()" [provision]="provision()"/>
+</p-dialog>
